@@ -1,6 +1,6 @@
 /vendor
 /build
 /Tests/thrift
+/bin
 composer.phar
 composer.lock
-.gitignore

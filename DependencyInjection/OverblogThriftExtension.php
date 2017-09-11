@@ -44,6 +44,23 @@ class OverblogThriftExtension extends Extension
         foreach ($config['clients'] as $name => $client) {
             $this->loadClient($name, $client, $container, $config['testMode']);
         }
+
+        // Enable loader listener if needed
+        if (!$container->getParameter('thrift.use_composer_loader')) {
+            $loaderListenerDefinition = $container->register(
+                'thrift.classloader.listener',
+                $container->getParameter('thrift.classloader.listener.class')
+            );
+            $loaderListenerDefinition->setArguments([$container->getParameter('kernel.cache_dir')]);
+            $loaderListenerDefinition->addTag(
+                'kernel.event_listener',
+                ['event' => 'kernel.request', 'method' => 'onKernelRequest', 'priority' => 255]
+            );
+            $loaderListenerDefinition->addTag(
+                'kernel.event_listener',
+                ['event' => 'kernel.command', 'method' => 'onConsoleCommand', 'priority' => 255]
+            );
+        }
     }
 
     /**

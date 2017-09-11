@@ -58,7 +58,7 @@ class ThriftCompiler
     /**
      * Last compiler output.
      *
-     * @var string
+     * @var array
      */
     protected $lastOutput;
 
@@ -221,7 +221,7 @@ class ThriftCompiler
     /**
      * Return the last compiler output.
      *
-     * @return string
+     * @return array
      */
     public function getLastOutput()
     {

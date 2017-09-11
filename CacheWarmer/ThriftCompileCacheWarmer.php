@@ -70,8 +70,10 @@ class ThriftCompileCacheWarmer
 
     /**
      * Compile Thrift Model.
+     *
+     * @param bool $generateClassMap
      */
-    public function compile()
+    public function compile($generateClassMap = true)
     {
         $compiler = new ThriftCompiler();
         $compiler->setExecPath($this->path);
@@ -107,14 +109,16 @@ class ThriftCompileCacheWarmer
             }
         }
 
-        // Check if thrift cache directory exists
-        $fs = new Filesystem();
+        if ($generateClassMap) {
+            // Check if thrift cache directory exists
+            $fs = new Filesystem();
 
-        if (!$fs->exists($cacheDir)) {
-            $fs->mkdir($cacheDir);
+            if (!$fs->exists($cacheDir)) {
+                $fs->mkdir($cacheDir);
+            }
+
+            // Generate ClassMap
+            ClassMapGenerator::dump($cacheDir, sprintf('%s/classes.map', $cacheDir));
         }
-
-        // Generate ClassMap
-        ClassMapGenerator::dump($cacheDir, sprintf('%s/classes.map', $cacheDir));
     }
 }
